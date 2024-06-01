@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - db-data:/etc/data
+
+    environment:
+      POSTGRES_USER: mmusica
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: recommender-web-shop
+
+    ports:
+      - 5432:5432
+
+
+
+volumes:
+  db-data:
