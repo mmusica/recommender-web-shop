@@ -3,24 +3,25 @@ package github.mmusica.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "product_category")
-public class ProductCategory {
+@Table(name = "genre")
+public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @Column(name = "name")
+    private String name;
 
-    @ManyToOne()
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MovieGenre> movieGenres;
+
 }

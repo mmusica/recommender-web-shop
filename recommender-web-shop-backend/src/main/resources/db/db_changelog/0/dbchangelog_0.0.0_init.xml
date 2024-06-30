@@ -4,24 +4,18 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
-    <changeSet id="create-product-table" author="mmusica">
-        <createTable tableName="product">
+    <changeSet id="create-movie-table" author="mmusica">
+        <createTable tableName="movie">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="pk_product"/>
+                <constraints primaryKey="true" primaryKeyName="pk_movie"/>
             </column>
-            <column name="title" type="varchar(255)"/>
-            <column name="average_rating" type="bigint"/>
-            <column name="rating_number" type="bigint"/>
-            <column name="description" type="text"/>
-            <column name="price" type="bigint"/>
-            <column name="image" type="text"/>
-            <column name="parent_asin" type="varchar(255)"/>
-            <column name="bought_together" type="varchar(255)"/>
+            <column name="movie_id" type="bigint"/>
+            <column name="name" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
-    <changeSet id="create-category-table" author="mmusica">
-        <createTable tableName="category">
+    <changeSet id="create-genre-table" author="mmusica">
+        <createTable tableName="genre">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="pk_category"/>
             </column>
@@ -29,52 +23,21 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create-feature-table" author="mmusica">
-        <createTable tableName="feature">
+    <changeSet id="create-movie-genre-table" author="mmusica">
+        <createTable tableName="movie_genre">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="pk_description"/>
+                <constraints primaryKey="true" primaryKeyName="pk_movieGenre"/>
             </column>
-            <column name="description" type="varchar(255)"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="create-product_feature-table" author="mmusica">
-        <createTable tableName="product_feature">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="pk_productFeature"/>
-            </column>
-            <column  type="bigint" name="product_id">
-                <constraints foreignKeyName="fk_productFeature_product"
-                             referencedTableName="product"
+            <column name="movie_id" type="bigint">
+                <constraints foreignKeyName="fk_movieGenre_movie"
+                             referencedTableName="movie"
                              referencedColumnNames="id"
                              deleteCascade="true"
                 />
             </column>
-            <column type="bigint" name="feature_id">
-                <constraints foreignKeyName="fk_productFeature_feature"
-                             referencedTableName="feature"
-                             referencedColumnNames="id"
-                             deleteCascade="true"
-                />
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="create-product-category-table" author="mmusica">
-        <createTable tableName="product_category">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="pk_productCategory"/>
-            </column>
-            <column name="product_id" type="bigint">
-                <constraints foreignKeyName="fk_productCategory_product"
-                             referencedTableName="product"
-                             referencedColumnNames="id"
-                             deleteCascade="true"
-                />
-            </column>
-            <column name="category_id" type="bigint">
-                <constraints foreignKeyName="fk_productCategory_category"
-                             referencedTableName="category"
+            <column name="genre_id" type="bigint">
+                <constraints foreignKeyName="fk_productCategory_genre"
+                             referencedTableName="genre"
                              referencedColumnNames="id"
                              deleteCascade="true"
                 />

@@ -5,23 +5,25 @@ import lombok.*;
 
 import java.util.Set;
 
-@Getter
-@Setter
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "category")
-public class Category {
+@Getter
+@Setter
+@Table(name = "movie")
+public class Movie {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "movie_id")
+    private Long movie_id;
 
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductCategory> productCategories;
-
+    @OneToMany(mappedBy = "movie")
+    private Set<MovieGenre> movieGenres;
 }
