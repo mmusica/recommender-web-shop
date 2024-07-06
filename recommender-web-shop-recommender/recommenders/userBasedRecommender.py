@@ -53,6 +53,9 @@ if __name__ == '__main__':
         usermovie2rating_test = pickle.load(f)
 
     user_count = np.max(list(user2movie.keys())) + 1
+    print(len(user2movie.keys()))
+    print(list(user2movie.keys()))
+    print(user_count)
 
     K = 25
     limit = 5
