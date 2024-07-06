@@ -9,7 +9,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="pk_movie"/>
             </column>
-            <column name="movie_id" type="bigint"/>
+            <column name="movie_indx" type="bigint"/>
             <column name="name" type="varchar(255)"/>
         </createTable>
     </changeSet>
@@ -58,17 +58,17 @@
 
     <changeSet id="create-user_movie_rating-table" author="mmusica">
         <createTable tableName="user_movie_rating">
-            <column name="id">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="pk_userMovieRating"/>
             </column>
-            <column name="user_id">
+            <column name="user_id" type="bigint">
                 <constraints foreignKeyName="fk_userMovieRating_user"
                              referencedTableName="user"
                              referencedColumnNames="id"
                              deleteCascade="true"
                 />
             </column>
-            <column name="movie_id">
+            <column name="movie_id" type="bigint">
                 <constraints foreignKeyName="fk_userMovieRating_movie"
                              referencedTableName="movie"
                              referencedColumnNames="id"
