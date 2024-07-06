@@ -68,7 +68,7 @@ public class MovieDatabaseLoader {
 
     private Movie convertToMovie(String[] values) {
         return Movie.builder()
-                .movie_id(Long.parseLong(values[INDX]))
+                .movieIndx(Long.parseLong(values[INDX]))
                 .name(values[TITLE])
                 .build();
     }

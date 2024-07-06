@@ -19,8 +19,8 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "movie_id")
-    private Long movie_id;
+    @Column(name = "movie_indx")
+    private Long movieIndx;
 
     @Column(name = "name")
     private String name;
