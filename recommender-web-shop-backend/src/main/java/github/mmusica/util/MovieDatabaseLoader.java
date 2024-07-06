@@ -1,6 +1,6 @@
 package github.mmusica.util;
 
-import github.mmusica.event.LoadEvent;
+import github.mmusica.event.LoadMovieGeneresEvent;
 import github.mmusica.model.Genre;
 import github.mmusica.model.Movie;
 import github.mmusica.model.MovieGenre;
@@ -37,7 +37,7 @@ public class MovieDatabaseLoader {
     MovieRepository movieRepository;
 
     @Transactional
-    public void loadMoviesIntoDatabase(@ObservesAsync LoadEvent loadEvent) {
+    public void loadMoviesIntoDatabase(@ObservesAsync LoadMovieGeneresEvent loadMovieGeneresEvent) {
         int i = 0;
         try (BufferedReader br = new BufferedReader(getInputStreamReader())) {
             String line;

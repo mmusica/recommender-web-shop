@@ -58,10 +58,9 @@ if __name__ == '__main__':
     with (open('usermovie2rating_test.bin', 'rb')) as f:
         usermovie2rating_test = pickle.load(f)
 
-    movie_count = np.max(list(movie2user.keys())) + 1
-    u1 = np.max(list(user2movie.keys()))
-    u2 = np.max([u for (u, m), r in usermovie2rating_test.items()])
-    user_count = max(u1, u2)
+    m1 = np.max(list(movie2user.keys()))
+    m2 = np.max([m for (u, m), r in usermovie2rating_test.items()])
+    movie_count = max(m1 + m2) + 1
 
     K = 20
     limit = 5

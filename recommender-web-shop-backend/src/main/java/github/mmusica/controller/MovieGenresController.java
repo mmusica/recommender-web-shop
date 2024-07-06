@@ -1,6 +1,7 @@
 package github.mmusica.controller;
 
-import github.mmusica.event.LoadEvent;
+import github.mmusica.event.LoadMovieGeneresEvent;
+import github.mmusica.event.LoadUserRatingsEvent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -12,12 +13,22 @@ import jakarta.ws.rs.Path;
 public class MovieGenresController {
 
     @Inject
-    Event<LoadEvent> event;
+    Event<LoadMovieGeneresEvent> moviesEvent;
+
+    @Inject
+    Event<LoadUserRatingsEvent> usersEvent;
 
     @GET
-    @Path("/loadData")
+    @Path("/loadData/movies")
     public String loadMovieGenresToDatabase(){
-        event.fireAsync(new LoadEvent());
-        return "Loaded";
+        moviesEvent.fireAsync(new LoadMovieGeneresEvent());
+        return "Loading movies, be patient...";
+    }
+
+    @GET
+    @Path("loadData/userRatings")
+    public String loadUserRatingsToDatabase(){
+        usersEvent.fireAsync(new LoadUserRatingsEvent());
+        return "Loading users, be patient....";
     }
 }

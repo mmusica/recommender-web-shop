@@ -3,6 +3,7 @@ package github.mmusica.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,4 +27,7 @@ public class Movie {
 
     @OneToMany(mappedBy = "movie")
     private Set<MovieGenre> movieGenres;
+
+    @OneToMany(mappedBy = "movie")
+    private List<UserMovieRating> userMovieRatings;
 }

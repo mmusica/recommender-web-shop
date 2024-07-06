@@ -36,12 +36,46 @@
                 />
             </column>
             <column name="genre_id" type="bigint">
-                <constraints foreignKeyName="fk_productCategory_genre"
+                <constraints foreignKeyName="fk_movieGenre_genre"
                              referencedTableName="genre"
                              referencedColumnNames="id"
                              deleteCascade="true"
                 />
             </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-user-table" author="mmusica">
+        <createTable tableName="user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_user"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-user_movie_rating-table" author="mmusica">
+        <createTable tableName="user_movie_rating">
+            <column name="id">
+                <constraints primaryKey="true" primaryKeyName="pk_userMovieRating"/>
+            </column>
+            <column name="user_id">
+                <constraints foreignKeyName="fk_userMovieRating_user"
+                             referencedTableName="user"
+                             referencedColumnNames="id"
+                             deleteCascade="true"
+                />
+            </column>
+            <column name="movie_id">
+                <constraints foreignKeyName="fk_userMovieRating_movie"
+                             referencedTableName="movie"
+                             referencedColumnNames="id"
+                             deleteCascade="true"
+                />
+            </column>
+            <column name="rating" type="float"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

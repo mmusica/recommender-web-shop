@@ -54,10 +54,6 @@ if __name__ == '__main__':
 
     user_count = np.max(list(user2movie.keys())) + 1
 
-    m1 = np.max(list(movie2user.keys()))
-    m2 = np.max([m for (u, m), r in usermovie2rating_test.items()])
-    movie_count = max(m1, m2) + 1
-
     K = 25
     limit = 5
     neighbors = {}
