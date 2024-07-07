@@ -15,6 +15,12 @@ class CollaborativeFiltering:
         self.usermovie2rating = usermovie2rating
         self.usermovie2rating_test = usermovie2rating_test
 
+    def mean_squared_error(p, t):
+        p = np.array(p)
+        t = np.array(t)
+
+        return np.mean((p - t) ** 2)
+
     def predict(self, entity_to_predict, entity_predicting_with):
         numerator = 0
         denominator = 0

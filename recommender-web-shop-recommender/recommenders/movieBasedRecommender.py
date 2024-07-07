@@ -3,6 +3,7 @@ import pickle
 
 import numpy as np
 from sortedcontainers import SortedList
+from dao import UserMovieRatingDao
 
 
 def predict(user, movie):
@@ -41,48 +42,53 @@ if __name__ == '__main__':
             not os.path.exists('usermovie2rating_test.bin'):
         pass
 
-    user2movie = {}
-    movie2user = {}
-    usermovie2rating = {}
-    usermovie2rating_test = {}
-
-    with (open('user2movie.bin', 'rb')) as f:
-        user2movie = pickle.load(f)
-
-    with (open('movie2user.bin', 'rb')) as f:
-        movie2user = pickle.load(f)
-
-    with (open('usermovie2rating.bin', 'rb')) as f:
-        usermovie2rating = pickle.load(f)
-
-    with (open('usermovie2rating_test.bin', 'rb')) as f:
-        usermovie2rating_test = pickle.load(f)
+    # user2movie = {}
+    # movie2user = {}
+    # usermovie2rating = {}
+    # usermovie2rating_test = {}
+    #
+    # with (open('user2movie.bin', 'rb')) as f:
+    #     user2movie = pickle.load(f)
+    #
+    # with (open('movie2user.bin', 'rb')) as f:
+    #     movie2user = pickle.load(f)
+    #
+    # with (open('usermovie2rating.bin', 'rb')) as f:
+    #     usermovie2rating = pickle.load(f)
+    #
+    # with (open('usermovie2rating_test.bin', 'rb')) as f:
+    #     usermovie2rating_test = pickle.load(f)
+    user_movie_ratings_dao = UserMovieRatingDao()
+    usermovie2rating, usermovie2rating_test, user2movie, movie2user = user_movie_ratings_dao.get_train_and_test_set()
 
     m1 = np.max(list(movie2user.keys()))
     m2 = np.max([m for (u, m), r in usermovie2rating_test.items()])
-    movie_count = max(m1 + m2) + 1
+    movie_count = max(m1, m2)
 
     K = 20
     limit = 5
     neighbours = {}
-    averages = []
-    deviations = []
-    for i in range(movie_count):
+    averages = {}
+    deviations = {}
+    for i in range(1, movie_count + 1):
 
         users_i = movie2user[i]
         users_i_set = set(users_i)
-        ratings_i = {user: usermovie2rating[user, i] for user in users_i}
+        try:
+            ratings_i = {user: usermovie2rating[user, i] for user in users_i}
+        except KeyError:
+            continue
         avg_i = np.mean(list(ratings_i.values()))
 
         dev_i = {user: (rating - avg_i) for user, rating in ratings_i.items()}
         dev_i_values = np.array(list(dev_i.values()))
         sigma_i = np.sqrt(dev_i_values.dot(dev_i_values))
 
-        deviations.append(dev_i)
-        averages.append(avg_i)
+        deviations[i] = dev_i
+        averages[i] = avg_i
         sorted_list = SortedList()
 
-        for j in range(movie_count):
+        for j in range(1, movie_count + 1):
             if i == j:
                 continue
 
@@ -92,7 +98,10 @@ if __name__ == '__main__':
 
             if len(users_in_common) > limit:
                 ratings_j = {user: usermovie2rating[user, j] for user in users_j}
-                avg_j = np.mean(list(ratings_j.values()))
+                try:
+                    avg_j = np.mean(list(ratings_j.values()))
+                except KeyError:
+                    continue
 
                 dev_j = {user: (rating - avg_j) for user, rating in ratings_j.items()}
                 dev_j_values = np.array(list(dev_j.values()))
