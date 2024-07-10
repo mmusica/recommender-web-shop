@@ -3,3 +3,5 @@
 *.jsonl
 *.ipynb_checkpoints
 *.idea
+*.bin
+__pycache__

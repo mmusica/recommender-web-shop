@@ -7,14 +7,18 @@ RATING = 3
 
 
 class UserMovieRatingDao:
-
     def __init__(self):
         self.train_user2movie = {}
         self.train_movie2user = {}
 
     def __get_connection(self):
-        return psycopg2.connect(database='recommender-web-shop', user='mmusica', password='pass', host='localhost',
-                                port='5432')
+        return psycopg2.connect(
+            database="recommender-web-shop",
+            user="mmusica",
+            password="pass",
+            host="localhost",
+            port="5432",
+        )
 
     def __close_connection(self, conn, cur):
         conn.commit()
@@ -125,7 +129,7 @@ class UserMovieRatingDao:
         return usermovie2rating, usermovie2rating_test, self.train_user2movie, self.train_movie2user
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     user_dao = UserMovieRatingDao()
     user_movies = user_dao.get_user_movies()
     print(len(user_movies[1]))

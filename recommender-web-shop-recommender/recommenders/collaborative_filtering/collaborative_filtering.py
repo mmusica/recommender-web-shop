@@ -1,21 +1,24 @@
-import os
-import pickle
-
+from typing import Dict
 import numpy as np
 from sortedcontainers import SortedList
+from utils import PickleUtil
 
 
 class CollaborativeFiltering:
-    def __init__(self, user2movie, movie2user, usermovie2rating, usermovie2rating_test):
+    def __init__(
+        self,
+        user2movie: Dict,
+        movie2user: Dict,
+        usermovie2rating: Dict,
+    ):
         self.deviations = None
         self.averages = None
         self.neighbors = None
         self.user2movie = user2movie
         self.movie2user = movie2user
         self.usermovie2rating = usermovie2rating
-        self.usermovie2rating_test = usermovie2rating_test
 
-    def mean_squared_error(p, t):
+    def mean_squared_error(self, p, t):
         p = np.array(p)
         t = np.array(t)
 
@@ -27,7 +30,9 @@ class CollaborativeFiltering:
 
         for neg_w, other_entity in self.neighbors[entity_to_predict]:
             try:
-                numerator += -neg_w * self.deviations[other_entity][entity_predicting_with]
+                numerator += (
+                    -neg_w * self.deviations[other_entity][entity_predicting_with]
+                )
                 denominator += abs(neg_w)
             except KeyError:
                 pass
@@ -45,35 +50,39 @@ class CollaborativeFiltering:
         dev_values = np.array(list(dev.values()))
         return np.sqrt(dev_values.dot(dev_values))
 
-    def __calculate_values(self, dev, ratings):
+    def __calculate_values(self, dev, ratings, i):
         avg = np.mean(list(ratings.values()))
         new_dev = {user: (rating - avg) for user, rating in ratings.items()}
         # appends the deviations of user ratings for each  item (i)
         dev.update(new_dev)
         # appends averages and deviations
-        self.deviations.append(dev)
-        self.averages.append(avg)
+        self.deviations[i] = dev
+        self.averages[i] = avg
 
     def user_user_calculate(self, movies, dev, user_id):
         # get ratings of every movie for this specific user
         ratings = {movie: self.usermovie2rating[(user_id, movie)] for movie in movies}
-        self.__calculate_values(dev, ratings)
+        self.__calculate_values(dev, ratings, user_id)
 
     def movie_calculate_values(self, users, dev, movie_index):
         # get ratings that each user has for this specific movie
-        ratings = {user: self.usermovie2rating[user, movie_index] for user in users}
-        self.__calculate_values(dev, ratings)
+        ratings = {user: self.usermovie2rating[(user, movie_index)] for user in users}
+        self.__calculate_values(dev, ratings, movie_index)
+
+    def __dump(self, neighbors_f, averages_f, deviations_f):
+        pk = PickleUtil()
+        pk.dump_binary_dict(neighbors_f, self.neighbors)
+        pk.dump_binary_dict(averages_f, self.averages)
+        pk.dump_binary_dict(deviations_f, self.deviations)
 
     def movie_movie_based(self, K, limit):
         self.neighbors = {}
-        self.averages = []
-        self.deviations = []
+        self.averages = {}
+        self.deviations = {}
 
-        m1 = np.max(list(self.movie2user.keys())) + 1
-        m2 = np.max([m for (u, m), r in self.usermovie2rating_test.items()])
-        movie_count = max(m1 + m2) + 1
+        count = 0
 
-        for i in range(movie_count):
+        for i in self.movie2user.keys():
             users_i = self.movie2user[i]
             users_i_set = set(users_i)
             dev_i = {}
@@ -82,7 +91,7 @@ class CollaborativeFiltering:
 
             sorted_list = SortedList()
 
-            for j in range(movie_count):
+            for j in self.movie2user.keys():
                 if i == j:
                     continue
 
@@ -91,7 +100,6 @@ class CollaborativeFiltering:
                 users_in_common = users_i_set.intersection(users_j_set)
 
                 if len(users_in_common) > limit:
-
                     dev_j = {}
                     self.movie_calculate_values(users_j, dev_j, j)
                     sigma_j = self.__calculate_sigma(dev_j)
@@ -105,16 +113,19 @@ class CollaborativeFiltering:
                         del sorted_list[-1]
 
             self.neighbors[i] = sorted_list
-            print(f"On movie: {i}/{movie_count}")
+            print(f"On movie: {count}/{len(self.movie2user.keys())}")
+            count += 1
+
+        self.__dump('neigbours_movie.bin', 'averages_movie.bin', 'deviations_movie.bin')
 
     def user_user_based(self, K, limit):
         self.neighbors = {}
-        self.averages = []
-        self.deviations = []
+        self.averages = {}
+        self.deviations = {}
 
         user_count = np.max(list(self.user2movie.keys())) + 1
-
-        for i in range(user_count):
+        count = 0
+        for i in self.user2movie.keys():
             movies_i = self.user2movie[i]
             movies_i_set = set(movies_i)
 
@@ -124,7 +135,7 @@ class CollaborativeFiltering:
 
             sorted_list = SortedList()
 
-            for j in range(user_count):
+            for j in self.user2movie.keys():
                 if j == i:
                     continue
 
@@ -146,4 +157,7 @@ class CollaborativeFiltering:
                         del sorted_list[-1]
 
             self.neighbors[i] = sorted_list
-            print(f"On user: {i}/{user_count}")
+            print(f"On user: {count}/{user_count}")
+            count += 1
+
+        self.__dump('neigbours_user.bin', 'averages_user.bin', 'deviations_user.bin')

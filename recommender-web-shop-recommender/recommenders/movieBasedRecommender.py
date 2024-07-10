@@ -1,6 +1,3 @@
-import os
-import pickle
-
 import numpy as np
 from sortedcontainers import SortedList
 from dao import UserMovieRatingDao
@@ -36,28 +33,6 @@ def mean_squared_error(p, t):
 
 if __name__ == '__main__':
 
-    if not os.path.exists('user2movie.bin') or \
-            not os.path.exists('movie2user.bin') or \
-            not os.path.exists('usermovie2rating.bin') or \
-            not os.path.exists('usermovie2rating_test.bin'):
-        pass
-
-    # user2movie = {}
-    # movie2user = {}
-    # usermovie2rating = {}
-    # usermovie2rating_test = {}
-    #
-    # with (open('user2movie.bin', 'rb')) as f:
-    #     user2movie = pickle.load(f)
-    #
-    # with (open('movie2user.bin', 'rb')) as f:
-    #     movie2user = pickle.load(f)
-    #
-    # with (open('usermovie2rating.bin', 'rb')) as f:
-    #     usermovie2rating = pickle.load(f)
-    #
-    # with (open('usermovie2rating_test.bin', 'rb')) as f:
-    #     usermovie2rating_test = pickle.load(f)
     user_movie_ratings_dao = UserMovieRatingDao()
     usermovie2rating, usermovie2rating_test, user2movie, movie2user = user_movie_ratings_dao.get_train_and_test_set()
 
