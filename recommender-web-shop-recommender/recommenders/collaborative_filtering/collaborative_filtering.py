@@ -2,21 +2,26 @@ from typing import Dict
 import numpy as np
 from sortedcontainers import SortedList
 from utils import PickleUtil
+import os
 
 
 class CollaborativeFiltering:
     def __init__(
         self,
-        user2movie: Dict,
-        movie2user: Dict,
-        usermovie2rating: Dict,
+        user2movie: Dict = None,
+        movie2user: Dict = None,
+        usermovie2rating: Dict = None,
     ):
         self.deviations = None
         self.averages = None
-        self.neighbors = None
+        self.neighbours = None
         self.user2movie = user2movie
         self.movie2user = movie2user
         self.usermovie2rating = usermovie2rating
+        self.my_path = os.path.dirname(__file__)
+
+    def reset(self):
+        self.__init__()
 
     def mean_squared_error(self, p, t):
         p = np.array(p)
@@ -24,11 +29,30 @@ class CollaborativeFiltering:
 
         return np.mean((p - t) ** 2)
 
-    def predict(self, entity_to_predict, entity_predicting_with):
+    def predict(self, entity_to_predict, entity_predicting_with, type):
+        utils = PickleUtil()
+        if type == "movie" and self.averages is None:
+            self.averages = utils.load_binary_dict(self.my_path + "/averages_movie.bin")
+            self.deviations = utils.load_binary_dict(
+                self.my_path + "/deviations_movie.bin"
+            )
+            self.neighbours = utils.load_binary_dict(
+                self.my_path + "/neighbours_movie.bin"
+            )
+
+        if type == "user" and self.averages is None:
+            self.averages = utils.load_binary_dict(self.my_path + "/averages_user.bin")
+            self.deviations = utils.load_binary_dict(
+                self.my_path + "/deviations_user.bin"
+            )
+            self.neighbours = utils.load_binary_dict(
+                self.my_path + "/neighbours_user.bin"
+            )
+
         numerator = 0
         denominator = 0
 
-        for neg_w, other_entity in self.neighbors[entity_to_predict]:
+        for neg_w, other_entity in self.neighbours[entity_to_predict]:
             try:
                 numerator += (
                     -neg_w * self.deviations[other_entity][entity_predicting_with]
@@ -69,14 +93,15 @@ class CollaborativeFiltering:
         ratings = {user: self.usermovie2rating[(user, movie_index)] for user in users}
         self.__calculate_values(dev, ratings, movie_index)
 
-    def __dump(self, neighbors_f, averages_f, deviations_f):
+    def __dump(self, neighbours_f, averages_f, deviations_f):
         pk = PickleUtil()
-        pk.dump_binary_dict(neighbors_f, self.neighbors)
-        pk.dump_binary_dict(averages_f, self.averages)
-        pk.dump_binary_dict(deviations_f, self.deviations)
+        pk.dump_binary_dict(self.my_path + neighbours_f, self.neighbours)
+        pk.dump_binary_dict(self.my_path + averages_f, self.averages)
+        pk.dump_binary_dict(self.my_path + deviations_f, self.deviations)
+        self.reset()
 
     def movie_movie_based(self, K, limit):
-        self.neighbors = {}
+        self.neighbours = {}
         self.averages = {}
         self.deviations = {}
 
@@ -112,14 +137,16 @@ class CollaborativeFiltering:
                     if len(sorted_list) > K:
                         del sorted_list[-1]
 
-            self.neighbors[i] = sorted_list
+            self.neighbours[i] = sorted_list
             print(f"On movie: {count}/{len(self.movie2user.keys())}")
             count += 1
 
-        self.__dump('neigbours_movie.bin', 'averages_movie.bin', 'deviations_movie.bin')
+        self.__dump(
+            "/neighbours_movie.bin", "/averages_movie.bin", "/deviations_movie.bin"
+        )
 
     def user_user_based(self, K, limit):
-        self.neighbors = {}
+        self.neighbours = {}
         self.averages = {}
         self.deviations = {}
 
@@ -156,8 +183,8 @@ class CollaborativeFiltering:
                     if len(sorted_list) > K:
                         del sorted_list[-1]
 
-            self.neighbors[i] = sorted_list
+            self.neighbours[i] = sorted_list
             print(f"On user: {count}/{user_count}")
             count += 1
 
-        self.__dump('neigbours_user.bin', 'averages_user.bin', 'deviations_user.bin')
+        self.__dump("/neighbours_user.bin", "/averages_user.bin", "/deviations_user.bin")
