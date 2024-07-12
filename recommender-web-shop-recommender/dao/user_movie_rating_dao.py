@@ -137,7 +137,13 @@ class UserMovieRatingDao:
         con = self.__get_connection()
         cur = con.cursor()
 
-        cur.execute("SELECT movie_id FROM user_movie_rating WHERE user_id !=%s", user_id)
+        cur.execute("""SELECT m.id AS movie_id
+        FROM movie m
+        LEFT JOIN user_movie_rating umr ON m.id = umr.movie_id AND umr.user_id = %s
+        WHERE umr.movie_id IS NULL""", (user_id,))
+        all_movies = cur.fetchall()
+        self.__close_connection(con, cur)
+        return [movie_id[0] for movie_id in all_movies]
 
 
 if __name__ == "__main__":
