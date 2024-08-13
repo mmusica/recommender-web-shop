@@ -12,6 +12,15 @@ import java.util.List;
 public interface RecommenderClient {
 
     @GET
-    @Path("/collaborative_filtering/movie-movie")
+    @Path("/collaborative-filtering/movie-movie")
     List<MovieRatingDto> getMovieTopN(@QueryParam("userId") Long userId, @QueryParam("count") Integer count);
+
+    @GET
+    @Path("/collaborative-filtering/user-user")
+    List<MovieRatingDto> getUserTopN(@QueryParam("userId") Long userId, @QueryParam("count") Integer count);
+
+
+    @GET
+    @Path("/matrix-factorization/ALS")
+    List<MovieRatingDto> getMovieTopNMatrixFactorization(@QueryParam("userId") Long userId, @QueryParam("count") Integer count);
 }
