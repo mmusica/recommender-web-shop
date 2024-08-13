@@ -145,14 +145,3 @@ class UserMovieRatingDao:
         self.__close_connection(con, cur)
         return [movie_id[0] for movie_id in all_movies]
 
-
-if __name__ == "__main__":
-    user_dao = UserMovieRatingDao()
-    user_movies = user_dao.get_user_movies()
-    print(len(user_movies[1]))
-
-    movie_users = user_dao.get_movie_users()
-    # print(movie_users[1])
-
-    rating = user_dao.get_user_movie_rating()
-    print(rating[(2, 3)])

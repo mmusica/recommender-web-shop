@@ -51,7 +51,7 @@ class CollaborativeFiltering:
 
         numerator = 0
         denominator = 0
-
+        entity_to_predict = int(entity_to_predict)
         for neg_w, other_entity in self.neighbours[entity_to_predict]:
             try:
                 numerator += (

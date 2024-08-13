@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MovieNameRatingDao {
+public class MovieNameRatingDto {
     Long movieId;
     Float rating;
     String name;
