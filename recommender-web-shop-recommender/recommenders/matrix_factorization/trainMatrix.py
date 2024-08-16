@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 
+#Code modified from https://github.com/lazyprogrammer/machine_learning_examples/blob/master/recommenders/mf.py
 if __name__ == '__main__':
     dao = UserMovieRatingDao()
 
@@ -18,14 +19,13 @@ if __name__ == '__main__':
 
 
     # initialize variables
-    K = 10 # latent dimensionality #Faktori su tu skriveni ali matrica ih uci, npr akcija komedija itd.
+    K = 10 # latent dimensionality
     W = np.random.randn(N, K)
     b = np.zeros(N)
     U = np.random.randn(M, K)
     c = np.zeros(M)
     mu = np.mean(list(usermovie2rating.values()))
 
-    # prediction[i,j] = W[i].dot(U[j]) + b[i] + c.T[j] + mu
 
     def get_loss(d):
         # d: (user_id, movie_id) -> rating
@@ -82,7 +82,7 @@ if __name__ == '__main__':
             cj = 0
             try:
                 for i in movie2user[j]:
-                    r = usermovie2rating[(i,j)]
+                    r = usermovie2rating[(i, j)]
                     matrix += np.outer(W[i], W[i])
                     vector += (r - b[i] - c[j] - mu)*W[i]
                     cj += (r - W[i].dot(U[j]) - b[i] - mu)

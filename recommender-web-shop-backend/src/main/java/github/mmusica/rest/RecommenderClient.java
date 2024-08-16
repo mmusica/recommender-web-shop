@@ -23,4 +23,12 @@ public interface RecommenderClient {
     @GET
     @Path("/matrix-factorization/ALS")
     List<MovieRatingDto> getMovieTopNMatrixFactorization(@QueryParam("userId") Long userId, @QueryParam("count") Integer count);
+
+    @GET
+    @Path("/deep-neural-network")
+    List<MovieRatingDto> getMovieTopNDeepNeuralNetwork(@QueryParam("userId") Long userId, @QueryParam("count") Integer count);
+
+    @GET
+    @Path("/deep-neural-network/batch")
+    List<MovieRatingDto> getMovieTopNDeepNeuralNetworkBatch(@QueryParam("userId") Long userId, @QueryParam("count") Integer count);
 }

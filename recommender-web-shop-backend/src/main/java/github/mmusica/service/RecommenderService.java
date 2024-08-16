@@ -34,6 +34,16 @@ public class RecommenderService {
         return getMovieNameRatingDtos(movieTopN);
     }
 
+    public List<MovieNameRatingDto> getTopNMoviesDnn(Long userId, Integer count) {
+        List<MovieRatingDto> movieTopN = recommenderClient.getMovieTopNDeepNeuralNetwork(userId, count);
+        return getMovieNameRatingDtos(movieTopN);
+    }
+
+    public List<MovieNameRatingDto> getTopNMoviesDnnBatch(Long userId, Integer count) {
+        List<MovieRatingDto> movieTopN = recommenderClient.getMovieTopNDeepNeuralNetworkBatch(userId, count);
+        return getMovieNameRatingDtos(movieTopN);
+    }
+
     private List<MovieNameRatingDto> getMovieNameRatingDtos(List<MovieRatingDto> movieTopN) {
         return movieTopN.stream().map(movieRatingDto ->
                 MovieNameRatingDto.builder()
@@ -43,4 +53,5 @@ public class RecommenderService {
                         .build()
         ).toList();
     }
+
 }
