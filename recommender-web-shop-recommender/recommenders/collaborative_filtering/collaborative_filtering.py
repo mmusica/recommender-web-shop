@@ -30,6 +30,7 @@ class CollaborativeFiltering:
         return np.mean((p - t) ** 2)
 
     def predict(self, entity_to_predict, entity_predicting_with, type):
+        entity_to_predict = int(entity_to_predict)
         utils = PickleUtil()
         if type == "movie" and self.averages is None:
             self.averages = utils.load_binary_dict(self.my_path + "/averages_movie.bin")
@@ -51,7 +52,6 @@ class CollaborativeFiltering:
 
         numerator = 0
         denominator = 0
-        entity_to_predict = int(entity_to_predict)
         for neg_w, other_entity in self.neighbours[entity_to_predict]:
             try:
                 numerator += (

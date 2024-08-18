@@ -1,9 +1,9 @@
 package github.mmusica.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import github.mmusica.model.Genre;
+import lombok.*;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,4 +13,5 @@ public class MovieNameRatingDto {
     Long movieId;
     Float rating;
     String name;
+    List<String> genres;
 }

@@ -5,6 +5,14 @@ export const loginUser = async (username: string) => {
   return response.data;
 };
 
+
+export const fetchLikedMovies = async (userId: number, count: number) => {
+  const response = await axiosInstance.get('movies', {
+    params: { userId, count },
+  });
+  return response.data;
+};
+
 export const fetchRecommendationsMovieCf = async (userId: number, count: number) => {
   const response = await axiosInstance.get('recommender/collaborative_filtering/movie-movie', {
     params: { userId, count },
@@ -37,7 +45,7 @@ export const fetchRecommendationsDnnBatch = async (userId: number, count: number
 // Function to fetch movie details including poster from TMDB API
 export const fetchMoviePoster = async (title: string, apiKey: string) => {
   const response = await axiosInstance.get(
-    `http://www.omdbapi.com?apikey=${apiKey}&t=${encodeURIComponent(title)}`
+    `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}&page=1&include_adult=false`
   );
   return response.data;
 };

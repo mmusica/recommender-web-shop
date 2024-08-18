@@ -12,7 +12,7 @@ if __name__ == "__main__":
         user2movie, movie2user, usermovie2rating 
     )
 
-    cf.user_user_based(25, 5)
+    #cf.movie_movie_based(20, 5)
     # cf = CollaborativeFiltering()
 
     training_predictions = []

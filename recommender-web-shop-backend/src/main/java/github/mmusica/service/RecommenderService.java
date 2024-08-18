@@ -2,6 +2,7 @@ package github.mmusica.service;
 
 import github.mmusica.dto.MovieNameRatingDto;
 import github.mmusica.dto.MovieRatingDto;
+import github.mmusica.model.Movie;
 import github.mmusica.repository.MovieRepository;
 import github.mmusica.rest.RecommenderClient;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -46,12 +47,19 @@ public class RecommenderService {
 
     private List<MovieNameRatingDto> getMovieNameRatingDtos(List<MovieRatingDto> movieTopN) {
         return movieTopN.stream().map(movieRatingDto ->
-                MovieNameRatingDto.builder()
-                        .movieId(movieRatingDto.getMovieId())
-                        .rating(movieRatingDto.getRating())
-                        .name(movieRepository.findById(movieRatingDto.getMovieId()).getName())
-                        .build()
+                {
+                    Movie byId = movieRepository.findById(movieRatingDto.getMovieId());
+                    return MovieNameRatingDto.builder()
+                            .movieId(movieRatingDto.getMovieId())
+                            .rating(movieRatingDto.getRating())
+                            .name(byId.getName())
+                            .genres(getGenreStrings(byId))
+                            .build();
+                }
         ).toList();
     }
 
+    private List<String> getGenreStrings(Movie byId) {
+        return byId.getMovieGenres().stream().map(it -> it.getGenre().getName()).toList();
+    }
 }

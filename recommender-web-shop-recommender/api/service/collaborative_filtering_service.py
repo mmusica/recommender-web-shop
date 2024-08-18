@@ -19,6 +19,7 @@ class CollaborativeFilteringService:
     def get_user_user_top_n(self, user_id, n):
         # rated_movies = self.umr_dao.get_rated_movies_excluding_user(user_id)
         # self.cf.predict(u, m)
+        self.umr_dao = UserMovieRatingDao()
         rated_movies = self.umr_dao.get_rated_movies_excluding_user(user_id)
         top_five_rating = SortedList(key=lambda x: -x[0])
 
@@ -33,6 +34,7 @@ class CollaborativeFilteringService:
         return [{"movieId": m, "rating": r} for r, m in top_five_rating]
 
     def get_movie_movie_top_n(self, user_id, n):
+        self.umr_dao = UserMovieRatingDao()
         rated_movies = self.umr_dao.get_rated_movies_excluding_user(user_id)
         top_five_rating = SortedList(key=lambda x: -x[0])
 
