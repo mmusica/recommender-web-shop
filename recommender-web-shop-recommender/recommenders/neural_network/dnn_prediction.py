@@ -4,7 +4,7 @@ import numpy as np
 from keras.api.models import load_model
 
 
-class DeepNeuralNetwork:
+class NeuralNetwork:
     def __init__(self):
         my_path = os.path.dirname(__file__)
         self.mu = np.load(my_path + '/mu.npy')

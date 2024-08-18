@@ -35,12 +35,12 @@ public class RecommenderService {
     }
 
     public List<MovieNameRatingDto> getTopNMoviesDnn(Long userId, Integer count) {
-        List<MovieRatingDto> movieTopN = recommenderClient.getMovieTopNDeepNeuralNetwork(userId, count);
+        List<MovieRatingDto> movieTopN = recommenderClient.getMovieTopNNeuralNetwork(userId, count);
         return getMovieNameRatingDtos(movieTopN);
     }
 
     public List<MovieNameRatingDto> getTopNMoviesDnnBatch(Long userId, Integer count) {
-        List<MovieRatingDto> movieTopN = recommenderClient.getMovieTopNDeepNeuralNetworkBatch(userId, count);
+        List<MovieRatingDto> movieTopN = recommenderClient.getMovieTopNNeuralNetworkBatch(userId, count);
         return getMovieNameRatingDtos(movieTopN);
     }
 

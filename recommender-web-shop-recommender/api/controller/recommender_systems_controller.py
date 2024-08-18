@@ -31,14 +31,14 @@ def get_top_n_movies_for_user():
     return flask.jsonify(mfs.get_top_n_movies_for_user_bmfr(user_id, count))
 
 
-@app.route("/deep-neural-network")
+@app.route("/neural-network")
 def get_deep_neural_network_rating():
     user_id = flask.request.args.get('userId')
     count = flask.request.args.get('count')
     return flask.jsonify(dnns.get_top_n_movies_for_user(user_id, count))
 
 
-@app.route("/deep-neural-network/batch")
+@app.route("/neural-network/batch")
 def get_deep_neural_network_rating_batch():
     user_id = flask.request.args.get('userId')
     count = flask.request.args.get('count')

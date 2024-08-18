@@ -1,7 +1,7 @@
 import numpy as np
 from sortedcontainers import SortedList
 
-from recommenders.deep_neural_network.dnn_prediction import DeepNeuralNetwork
+from recommenders.neural_network.dnn_prediction import NeuralNetwork
 
 from dao import UserMovieRatingDao
 
@@ -16,7 +16,7 @@ class DNNService:
 
     def __init__(self):
         self.umr_dao = UserMovieRatingDao()
-        self.dnn = DeepNeuralNetwork()
+        self.dnn = NeuralNetwork()
 
     def get_top_n_movies_for_user(self, user_id, n):
         user_id = int(user_id)

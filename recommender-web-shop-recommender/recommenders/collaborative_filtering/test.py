@@ -22,18 +22,18 @@ if __name__ == "__main__":
     test_targets = []
 
    
-    # for (u, m), rating in usermovie2rating.items():
-    #     training_predictions.append(cf.predict(m, u, "movie"))
-    #     training_targets.append(rating)
-    #
-    # for (u, m), rating in usermovie2rating_test.items():
-    #     test_predictions.append(cf.predict(m, u, "movie"))
-    #     test_targets.append(rating)
-    #
-    # print(
-    #     f"--MOVIE--\nMSE train: {cf.mean_squared_error(training_predictions, training_targets)}"
-    # )
-    # print(f"MSE test: {cf.mean_squared_error(test_predictions, test_targets)}\n--USER--")
+    for (u, m), rating in usermovie2rating.items():
+        training_predictions.append(cf.predict(m, u, "movie"))
+        training_targets.append(rating)
+
+    for (u, m), rating in usermovie2rating_test.items():
+        test_predictions.append(cf.predict(m, u, "movie"))
+        test_targets.append(rating)
+
+    print(
+        f"--MOVIE--\nMSE train: {cf.mean_squared_error(training_predictions, training_targets)}"
+    )
+    print(f"MSE test: {cf.mean_squared_error(test_predictions, test_targets)}\n--USER--")
 
     cf.averages = None
     cf.neighbours = None

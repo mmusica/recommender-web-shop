@@ -37,13 +37,13 @@ public class RecommendationController {
 
 
     @GET
-    @Path("/deep-neural-network")
+    @Path("/neural-network")
     public List<MovieNameRatingDto> getTopNMoviesDnn(@QueryParam("userId") Long userId, @QueryParam("count") Integer count) {
         return recommenderService.getTopNMoviesDnn(userId, count);
     }
 
     @GET
-    @Path("/deep-neural-network/batch")
+    @Path("/neural-network/batch")
     public List<MovieNameRatingDto> getTopNMoviesDnnBatch(@QueryParam("userId") Long userId, @QueryParam("count") Integer count) {
         return recommenderService.getTopNMoviesDnnBatch(userId, count);
     }

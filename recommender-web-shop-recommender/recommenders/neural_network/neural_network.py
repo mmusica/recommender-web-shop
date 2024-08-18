@@ -1,6 +1,7 @@
+#code modified from https://github.com/lazyprogrammer/machine_learning_examples/blob/master/recommenders/mf_keras_deep.py
+
 from __future__ import print_function, division
 from dao.user_movie_rating_dao import UserMovieRatingDao
-#code modified from https://github.com/lazyprogrammer/machine_learning_examples/blob/master/recommenders/mf_keras_deep.py
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -50,7 +51,6 @@ model = Model(inputs=[u, m], outputs=x)
 model.compile(
     loss='mse',
     optimizer='adam',
-    # optimizer=Adam(lr=0.01),
     metrics=['mse'],
 )
 
@@ -66,13 +66,8 @@ r = model.fit(
     verbose=2,
 )
 
-plt.plot(r.history['loss'], label="train loss")
-plt.plot(r.history['val_loss'], label="test loss")
-plt.legend()
-plt.show()
-
-plt.plot(r.history['mse'], label="train mse")
-plt.plot(r.history['val_mse'], label="test mse")
+plt.plot(r.history['mse'], label="trening mse")
+plt.plot(r.history['val_mse'], label="testni mse")
 plt.legend()
 plt.show()
 
